@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel administracyjny</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+          crossorigin="anonymous">
+</head>
+<body>
+<main class="container">
+    <div class="m2">
+        <a href="/">Strona główna</a>
+    </div>
+    <h1 class="text-center my-5">Panel administracyjny</h1>
+    <p><strong>Lista użytkowników</strong></p>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">nazwa</th>
+            <th scope="col">uprawnienia</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user: ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.username}"></td>
+            <td>
+                <th:block th:each="userrole: ${user.roles}">
+                    <p th:text="${userrole.role.displayValue}"></p>
+                </th:block>
+            </td>
+            <td>
+                <a th:href="|/adminPanel/editRoles/${user.id}|">Edytuj uprawnienia</a>
+            </td>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

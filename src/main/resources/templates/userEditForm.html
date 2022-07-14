@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edycja danych</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+          crossorigin="anonymous">
+</head>
+<body>
+<main class="container">
+    <h1 class="my-3">Edycja</h1>
+    <a href="/">Powrót do strony głównej</a>
+    <form th:action="@{|/userPanel/edit/${user.id}|}" method="post" th:object="${user}">
+        <br>
+        <label for="username" class="form-label">Nazwa użytkownika</label>
+        <input type="hidden" th:field="*{id}"/>
+        <div class="mb-3">
+            <input type="text" th:field="*{username}" id="username" placeholder="janex"/>
+        </div>
+        <label for="password" class="form-label">Nowe hasło</label>
+        <div class="mb-3">
+            <input type="password" th:field="*{password}" id="password" placeholder="F56HjKq"/>
+        </div>
+        <p>Po zmianie danych zostaniesz autmotycznie wylogowany. Zaloguj się ponownie korzystając z nowych danych</p>
+        <input type="submit" class="btn btn-primary" value="Zachowaj zmiany"/> <br/>
+    </form>
+</main>
+</body>
+</html>

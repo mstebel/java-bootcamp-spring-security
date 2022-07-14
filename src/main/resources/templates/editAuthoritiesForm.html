@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Zmiana uprawnień</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+          crossorigin="anonymous">
+</head>
+<body>
+<main class="container">
+    <div class="m2">
+        <a href="/">Strona główna</a>
+    </div>
+    <form th:action="@{|/adminPanel/editRoles/${user.id}|}" method="post" th:object="${user}">
+        <h1 class="text-center my-5">Uprawnienia użytkownika</h1>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Nazwa</th>
+                <th scope="col">Uprawnienia</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.username}"></td>
+                <td>
+                    <input type="checkbox" name="roles"
+                           th:each="role: ${roles}"
+                           th:text="${role}"
+                           th:value="${role.id}"
+                           th:field="*{roles}"/>
+                </td>
+            </tbody>
+        </table>
+        <input type="submit" class="btn btn-primary" value="Zachowaj zmiany"/> <br/>
+    </form>
+</main>
+</body>
+</html>
