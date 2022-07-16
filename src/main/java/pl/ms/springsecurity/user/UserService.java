@@ -4,9 +4,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.ms.springsecurity.user.dto.UserCredentialsDto;
-import pl.ms.springsecurity.user.dto.UserCredentialsDtoMapper;
-import pl.ms.springsecurity.user.dto.UserRegistrationDto;
+import pl.ms.springsecurity.user.dto.*;
 import pl.ms.springsecurity.userrole.Role;
 import pl.ms.springsecurity.userrole.UserRole;
 import pl.ms.springsecurity.userrole.UserRoleRepository;
@@ -31,7 +29,7 @@ public class UserService {
 
     public Optional<UserCredentialsDto> findCredentialsByUsername(String userName) {
         return userRepository.findByUsername(userName)
-                .map(UserCredentialsDtoMapper::map);
+                .map(UserDtoMapper::mapToUserCredentialsDto);
     }
 
     @Transactional
@@ -54,37 +52,39 @@ public class UserService {
         );
     }
 
-    public List<User> findAllWithoutCurrentUser() {
+    public List<UserViewDto> findAllWithoutCurrentUser() {
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
         return userRepository.findAll()
                 .stream()
                 .filter(user -> !user.getUsername().equals(currentUser.getName()))
+                .map(UserDtoMapper::mapToUserViewDto)
                 .collect(Collectors.toList());
     }
 
-    public User getCurrentUser() {
+    public Optional<UserEditDto> getCurrentUserEditDto() {
         String username = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();
-        return userRepository.findByUsername(username).orElseThrow();
+        return userRepository.findByUsername(username).map(UserDtoMapper::mapToUserEditDto);
     }
 
-    public void updateUser(User user, Long id) {
-        Optional<User> userOptionalDb = userRepository.findById(id);
+    public void updateUser(UserEditDto dto) {
+        Optional<User> userOptionalDb = userRepository.findById(dto.getId());
         User userInDb = userOptionalDb.orElseThrow();
-        userInDb.setUsername(user.getUsername());
-        String passwordHash = passwordEncoder.encode(user.getPassword());
+        userInDb.setUsername(dto.getUsername());
+        String passwordHash = passwordEncoder.encode(dto.getPassword());
         userInDb.setPassword(passwordHash);
         userRepository.save(userInDb);
     }
 
-    public User findUserById(Long id) {
-       return userRepository.findById(id).orElseThrow();
+    public Optional <UserRolesDto> findUserRolesDtoById(Long id) {
+      return userRepository.findById(id).map(UserDtoMapper::mapToUserRolesDto);
     }
 
-    public void updateRoles(User user, Long id) {
-        User userInDb = userRepository.findById(id).orElseThrow();
-        userInDb.setRoles(user.getRoles());
+    public void updateRoles(UserRolesDto dto) {
+        Optional<User> userOptionalDb = userRepository.findById(dto.getId());
+        User userInDb = userOptionalDb.orElseThrow();
+        userInDb.setRoles(dto.getRoles());
         userRepository.save(userInDb);
     }
     public List<UserRole> findAllRoles() {

@@ -29,7 +29,7 @@
             <td th:text="${user.username}"></td>
             <td>
                 <th:block th:each="userrole: ${user.roles}">
-                    <p th:text="${userrole.role.displayValue}"></p>
+                    <p th:text="${userrole}"></p>
                 </th:block>
             </td>
             <td>

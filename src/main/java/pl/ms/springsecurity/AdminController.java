@@ -5,8 +5,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import pl.ms.springsecurity.user.User;
 import pl.ms.springsecurity.user.UserService;
+import pl.ms.springsecurity.user.dto.UserRolesDto;
+import pl.ms.springsecurity.user.dto.UserViewDto;
 import pl.ms.springsecurity.userrole.UserRole;
 
 
@@ -22,23 +23,23 @@ class AdminController {
 
     @GetMapping("/adminPanel")
     public String adminPanel(Model model) {
-        List<User> users = userService.findAllWithoutCurrentUser();
+        List<UserViewDto> users = userService.findAllWithoutCurrentUser();
         model.addAttribute("users", users);
         return "admin";
     }
 
     @GetMapping("/adminPanel/editRoles/{id}")
     public String editUserRolesForm(@PathVariable Long id, Model model) {
-        User userById = userService.findUserById(id);
-        model.addAttribute(userById);
+        UserRolesDto userRolesDto = userService.findUserRolesDtoById(id).orElseThrow();
+        model.addAttribute("user", userRolesDto);
         List<UserRole> roles = userService.findAllRoles();
         model.addAttribute("roles", roles);
         return "editAuthoritiesForm";
     }
 
     @PostMapping("/adminPanel/editRoles/{id}")
-    public String editUserRoles(@PathVariable Long id, User user) {
-        userService.updateRoles(user, id);
+    public String editUserRoles(UserRolesDto userRolesDto) {
+        userService.updateRoles(userRolesDto);
         return "redirect:/adminPanel";
     }
 }

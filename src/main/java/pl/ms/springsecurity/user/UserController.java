@@ -5,6 +5,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import pl.ms.springsecurity.user.dto.UserEditDto;
+
+import java.util.Optional;
 
 
 @Controller
@@ -17,14 +20,14 @@ class UserController {
 
     @GetMapping("/userPanel")
     public String userEditForm(Model model) {
-        User user = userService.getCurrentUser();
-        model.addAttribute("user", user);
+        UserEditDto currentUserEditDto = userService.getCurrentUserEditDto().orElseThrow();
+        model.addAttribute("user", currentUserEditDto);
         return "userEditForm";
     }
 
     @PostMapping("/userPanel/edit/{id}")
-    public String updateUserData(@PathVariable Long id, User user) {
-        userService.updateUser(user, id);
+    public String updateUserData(UserEditDto dto) {
+        userService.updateUser(dto);
         return "redirect:/logout";
     }
 }
