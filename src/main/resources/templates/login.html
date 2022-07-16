@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Logowanie</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+          crossorigin="anonymous">
+</head>
+<body>
+<main class="container">
+    <h1 class="my-3">Logowanie</h1>
+    <a href="/">Powrót do strony głównej</a>
+    <div class="my-3">
+        <p th:text="|Konto o nazwie: ${username} zostało utworzone pomyślnie!|" th:if="${username} ne null"></p>
+    </div>
+    <form th:action="@{/login}" method="post">
+        <br>
+        <label for="username" class="form-label">Nazwa użytkownika</label>
+        <div class="mb-3">
+            <input type="text" id="username" name="username" placeholder="janeczek"/>
+        </div>
+        <label for="password" class="form-label">Hasło</label>
+        <div class="mb-3">
+            <input type="password" id="password" name="password" placeholder="F56HjKq"/>
+        </div>
+        <input type="submit" class="btn btn-primary" value="Zaloguj"/> <br/>
+    </form>
+</main>
+</body>
+</html>
